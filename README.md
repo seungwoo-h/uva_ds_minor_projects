@@ -10,5 +10,5 @@
 ### Projects
 - Python app programming
 - Data analysis using R
-- Machine learning
+- Machine learning - Dutch CBS data regression on depression
 - NLP - News headline classification
