@@ -6,3 +6,9 @@
 - Databases and Data Visualization (8.5 / 10)
 - Machine Learning (8.5 / 10)
 - Text Retrieval and Mining (9.0 / 10)
+
+### Projects
+- Python app programming
+- Data analysis using R
+- Machine learning
+- NLP - News headline classification
