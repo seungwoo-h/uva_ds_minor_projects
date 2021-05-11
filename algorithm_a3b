@@ -1,0 +1,583 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Authors\n",
+    "- Jinhyun KIM (11968850)\n",
+    "- Seung Woo HONG (10879420)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "colab_type": "text",
+    "id": "cIDQHc4XuSqJ"
+   },
+   "source": [
+    "## Algorithms and Data Structures in Python --- Assignment III (Part Two) ##\n",
+    "\n",
+    "The following assignment will test your understanding of topics covered in the first four weeks of the course. This assignment **will count towards your grade** and should be submitted through Canvas by **01.10.2020 at 08:59 (CEST)**. You can choose to work individually or in pairs. You can get at most **5 points for Assignment III (Part Two)**, which is 5\\% of your final grade. \n",
+    "\n",
+    "- To test the code we will use Anaconda Python 3.7. Please state the names and student ids of the authors (at most two) at the top of the submitted fi\f",
+    "le.\n",
+    "\n",
+    "- For submission, you should submit a Jupyter Notebook (*.ipynb) file. Please rename your notebook filename and add the name of you assigned TA as ```assignment3b_{first_student_name}_{second_student_name}_{ta_name}.ipynb```. For example, your submission filename could look like ```assignment3b_fiststudentname_secondstudentname_ujjwal.ipynb``` or ```assignment3b_fiststudentname_secondstudentname_thanos.ipynb```. Please use \"ujjwal\" or \"thanos\" and not our fullnames. Additionally, also put the name of your TA inside the notebook as a comment. If you plan on working alone, please name the file as ```assignment3b_{student_name}_{ta_name}.ipynb```\n",
+    "\n",
+    "- Non-recursive solutions will not be accepted for exercises where a recursive solution has been requested.\n",
+    "\n",
+    "- Please follow the function prototype specifi\f",
+    "ed in the question for writing your code. The usage of additional functions is acceptable except when the problem expressly prohibits it.\n",
+    "\n",
+    "- **Important note:** For each exercise the correct solution counts for the 80% of the exercise's points, while code style counts for the remaining 20%. Please, make sure that you explain what your implementation does using comments.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "colab_type": "text",
+    "id": "bKJz39RtwRTj"
+   },
+   "source": [
+    "### Recursion : Innermost Data Extraction (2 points) ###\n",
+    "\n",
+    "![Example String](diagram.png)\n",
+    "\n",
+    "In this exercise, you are asked to provide a function ```find_innermost_substring(s)``` that returns the inner-most text substring for an input string ```s```.\n",
+    "\n",
+    "The innermost text substring is defined as the alphanumeric substring within the innermost square brackets in the input string. Consider the string ```s``` as below:\n",
+    "\n",
+    "NOTE: A *pair of brackets* is the left bracket ```[``` and its **corresponding** right bracket ```]``` character.\n",
+    "\n",
+    "```python\n",
+    "s = \"outer[in[inner[innermost]inner]in]outer\"\n",
+    "```\n",
+    "\n",
+    "```s``` contains multiple pairs of square brackets nested inside each other. You are asked to extract the innermost string that does not contain another nested pair of brackets.\n",
+    "\n",
+    "In the example image, the first (outermost) pair of brackets contains the substring ```in[inner[innermost]inner]in```. This, however, is not the innermost text string as it contains additional square brackets within it. \n",
+    "\n",
+    "At each step in this search, you will repeatedly look for the innermost substring by reducing the substring under consideration and evaluating whether it is the desired *innermost substring* or does it include a pair of brackets within it. You must repeat this search until you cannot find any opening ```[``` and closing ```]``` terms in the substring under consideration. \n",
+    "\n",
+    "In this exercise, you are required to provide a **recursive** implementation for ```find_innermost_substring(s)```. It should only return the innermost string as output.\n",
+    "\n",
+    "\n",
+    "```python\n",
+    "find_innermost_substring(\"outer[in[inner[innermost]inner]in]outer\")\n",
+    ">> 'innermost'\n",
+    "```\n",
+    "\n",
+    "Your solution should only compare matching brackets. The text between these brackets can be anything.\n",
+    "\n",
+    "```python\n",
+    "find_innermost_substring(\"outer[in[inner[innermost]inner]]\")\n",
+    ">> 'innermost'\n",
+    "```\n",
+    "\n",
+    "Finally, if there is no alphanumeric text within the innermost brackets, return an empty string:\n",
+    "\n",
+    "```python\n",
+    "find_innermost_substring(\"outer[in[inner[inner[]most]inner]]\")\n",
+    ">> ''\n",
+    "```\n",
+    "\n",
+    "1. To reduce complexity, we will not test your code with misformed inputs containing a single opening/closing bracket term with its corresponding opening/closing bracket term missing. \n",
+    "\n",
+    "2. For this exercise, the usage of any additional functions is not allowed."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def find_innermost_substring(s):\n",
+    "    \n",
+    "    #Find the first '['. If there is none, leave that string alone.\n",
+    "    if '[' in s:\n",
+    "        match = s.split('[',1)[1]\n",
+    "        \n",
+    "        #Init a counter\n",
+    "        counter = 1 \n",
+    "       \n",
+    "        #If you see a '{', increment the counter. If you see a '}', decrement the counter.\n",
+    "        #If the counter reaches 0, break\n",
+    "        for index in range(len(match)):\n",
+    "            if match[index] in '[]':\n",
+    "                counter = (counter + 1) if match[index] == '[' else (counter - 1)\n",
+    "                if not counter:\n",
+    "                    if '[' in match[:index]:\n",
+    "                        return find_innermost_substring(match[:index]) # Recursion\n",
+    "                    else:\n",
+    "                        return match[:index]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "''"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "find_innermost_substring(\"outer[in[inner[inner[]most]inner]]\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'innermost'"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "find_innermost_substring(\"outer[in[inner[innermost]inner]]\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'innermost'"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "find_innermost_substring(\"outer[in[inner[innermost]inner]in]outer\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Problem 1: Working with Classes (3 points) ##\n",
+    "\n",
+    "In this exercise, you are asked to implement a simple class **Grades_Manager**. Please, note that in the following exercise description the terms *user* and *teacher* are used interchangeably.\n",
+    "\n",
+    "The implemented ```Grades_Manager(object)``` class should store credentials for users/teachers and authenticate them to use the program. Also, your Grades Manager should provide basic functionality to users/teachers, such as setting student's grades and displaying them.\n",
+    "\n",
+    "You should write your class Grades_Manager that looks similar to the one below:\n",
+    "\n",
+    "```py\n",
+    "class Grades_Manager(object):\n",
+    "    def __init__(self):\n",
+    "        # INITIALIZE YOUR CLASS HERE.\n",
+    "\n",
+    "    def __authenticated(self):\n",
+    "        # FUNC TO AUTHENTICATE USER\n",
+    "        \n",
+    "    def __validate_input(self):\n",
+    "        # FUNC TO VALIDATE USERNAME AND PASSWORD\n",
+    "\n",
+    "    def __add_rubric(self):\n",
+    "        # FUNC TO ADD RUBRIC\n",
+    "\n",
+    "    def set_grades(self):\n",
+    "        # FUNC TO SET GRADES\n",
+    "\n",
+    "    def show_report(self, student_name):\n",
+    "        # FUNC TO SHOW REPORT\n",
+    "```\n",
+    "\n",
+    "For building your class you should (strictly) follow the process as follows:\n",
+    "\n",
+    "1. **(1 point)** Complete the ```__init__``` method to accept from the user an input ```userid``` and a ```password```, i.e. userid=teacheruserid and password=teacherspassword.\n",
+    "\n",
+    "    (a). Additionally, you should initialize a dictionary ```grades``` in which you can store the student grades.\n",
+    "    \n",
+    "    (b). From the ```__init__``` method call the ```__add_rubric``` function. The ```__add_rubric``` function should ask the user/teacher to enter a set of components, i.e. the names of the graded assignments, in a form of a string in which the components are separated through the use of a ',' (comma), i.e. *assignment1, assignment2, assignment3*.\n",
+    "        \n",
+    "    (c) Finally, from the ```__init__``` method you should call the ```__validate_input``` function. The ```__validate_input``` function should check if the user's credentials follow the principle rules of the system. These rules, mainly, are the following:\n",
+    "        \n",
+    "          (i). The userid as entered by the user in step (1.) has to be a string.\n",
+    "      \n",
+    "          (ii). The password as entered by the user in step (1.) has to be a string and contain at least 4 digits.\n",
+    "          \n",
+    "     If the user's credentials follow these guidelines move to the next point (2.) else print an error message and ask the user to try again later.\n",
+    "          \n",
+    "          \n",
+    "2. **(1 point)** Now that the backbone object of your Grades Manager class has been created, you should write a function ```set_grades```. The ```set_grades``` function should perform in the following way:\n",
+    "\n",
+    "    (a). Call the ```__authenticated``` function. You should implement the ```__authenticated``` function to ask the user to enter the password that they have created earlier. If the user successfully enters the password then you can authorize the user to move forward and set grades. In case that the user **does not** enter the correct password, you should display an error message and **refuse** to authorize them to set grades.\n",
+    "    \n",
+    "    (b). If a user is authorized, move forward, and set grades. The ```set_grades``` function should ask the user to give as input the name of the student they want to set a grade, the name of the component/assignment, and, finally, the points graded. Please, note that the grades should be on a 0 to 10 scale. An example of how your dictionary ```grades``` should look like once the ```set_grades``` is successfully executed is shown below:\n",
+    "    ```{'student_name1': {'assignment1': 8, 'assignment2': 9, 'assignment3': 10}}```\n",
+    "    \n",
+    "    \n",
+    "3. **(1 point)** Finally, you are asked to implement a ```show_report``` function, that would be called from a user. The ```show_report``` function should expect an input ```student_name``` from the user. Once, the user gives as an input a valid ```student_name```, e.g. a student name that exists in the dictionary where you store the grades, the function ```show_report``` should display the grades per component/assignment and a message 'Pass' or 'Fail' if the total grade is greater than 5. An example of what the ```show_report``` function should display is as follows:\n",
+    "\n",
+    "```py\n",
+    "Grades for student_name1\n",
+    "------\n",
+    "Component assignment1 : 8\n",
+    "Component assignment2 : 9\n",
+    "Component assignment3 : 10\n",
+    "Final (weighted) grade is 9.0\n",
+    "The student_name1 passed the course!\n",
+    "```\n",
+    "\n",
+    "\n",
+    "\n",
+    "Below you can see an example of the calls that you have to do to achieve this basic functionality.\n",
+    "\n",
+    "```py\n",
+    "teacher = Grades_Manager() # Initialize the class with creating teacher's specific userid and password\n",
+    "teacher.set_grades()  # Set grades for a student\n",
+    "teacher.show_report('student_name1') # Display the grades given a student name\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Grades_Manager(object):\n",
+    "    \n",
+    "    def __init__(self):\n",
+    "        # Accept Userid and password temporarily, validation check will executed later\n",
+    "        self.userid_temp = input(\"User ID: \")\n",
+    "        self.password_temp = input(\"Password: \")\n",
+    "        \n",
+    "        # Initialize grades dictionary to further store the grade data\n",
+    "        self.grades = {}\n",
+    "        \n",
+    "        # Run __add_rubric() method to accept input of graded assignments\n",
+    "        self.__add_rubric()\n",
+    "        \n",
+    "        # Validation check of temporary userid and password accepted earlier \n",
+    "        try:\n",
+    "            if not self.__validate_input(): # Checking if it is false\n",
+    "                # Raise error and skip assigning temporary userid and pw to the final userid and pw\n",
+    "                raise Exception(\"User ID must be a string and password must contains at leat 4 digits\")\n",
+    "            # if valid, assign to the final userid and pw\n",
+    "            self.userid = self.userid_temp\n",
+    "            self.password = self.password_temp\n",
+    "        except Exception as e:\n",
+    "            print(\"Error - \", e)\n",
+    "            # self.__init__()\n",
+    "            \n",
+    "    def __authenticated(self):\n",
+    "        # Accept input userid and password\n",
+    "        self.authenticate_userid = input(\"User ID: \")\n",
+    "        self.authenticate_password = input(\"Password: \")\n",
+    "        \n",
+    "        # Checking with userid and pw set earlier at the initialization process\n",
+    "        if (self.authenticate_userid != self.userid) or (self.authenticate_password != self.password):\n",
+    "            return False\n",
+    "        else:\n",
+    "            print(\"Authenticated\")\n",
+    "            return True\n",
+    "            \n",
+    "    def __validate_input(self):\n",
+    "        # for a letter in accepted temporary password, append to a list if it is a digit\n",
+    "        # list will be used to count how many digits are in the password\n",
+    "        userpassword_check = [i for i in self.password_temp if i.isdigit()]\n",
+    "        \n",
+    "        # userid must be a string, so if it is a full digit, not valid for the id\n",
+    "        # password must contains at least four digits\n",
+    "        if self.userid_temp.isdigit() or len(userpassword_check) < 4:\n",
+    "            return False # return false if userid and password is not suitable\n",
+    "        else:\n",
+    "            return True # return true if userid and password is suitable\n",
+    "\n",
+    "    def __add_rubric(self):\n",
+    "        # Accept input of graded assignments as string then split by \",\" then store to the list\n",
+    "        self.graded_assignments = input(\"Enter the List of Graded Assignments: \").split(\",\")\n",
+    "            \n",
+    "    def set_grades(self):\n",
+    "        # ID/PW Check\n",
+    "        # Error will be shown when no ID/PW is stored due to invalid format at initialization phase.\n",
+    "        try:\n",
+    "            if not self.__authenticated():\n",
+    "                raise Exception(\"Wrong ID/PW\") # skip the code below & raise error\n",
+    "            \n",
+    "            # Assign student name\n",
+    "            self.student_name = input(\"Student Name to Set Grades: \")\n",
+    "            \n",
+    "            # Initialize dictionary to store assignment:grade\n",
+    "            self.assignments_grade = {}\n",
+    "            for assignment in self.graded_assignments:\n",
+    "                # Accept input for grade of each assignment\n",
+    "                self.assignments_grade[assignment] = input(f\"{self.student_name}'s Grade for {assignment}: \")\n",
+    "                # Numerical check\n",
+    "                for c in self.assignments_grade[assignment].split(\".\"):\n",
+    "                    if not c.isdigit():\n",
+    "                        raise Exception(\"Non-numerical grade\")\n",
+    "                if self.assignments_grade[assignment].count(\".\") > 1:\n",
+    "                    raise Exception(\"Non-numerical grade\")\n",
+    "                # Grade scheme check\n",
+    "                if int(self.assignments_grade[assignment].split(\".\")[0]) not in range(0, 11):\n",
+    "                    raise Exception(\"The grades should be on a 0 to 10 scale\")\n",
+    "                    \n",
+    "            # Store in a final dictionary with student name\n",
+    "            self.grades[self.student_name] = self.assignments_grade\n",
+    "            print(self.grades)\n",
+    "            \n",
+    "        # Codes will be skipped through here when error raised.\n",
+    "        except Exception as e:\n",
+    "            print(\"Error - \", e)\n",
+    "\n",
+    "    def show_report(self, name):\n",
+    "        \n",
+    "        # Check if student name is in the grade dictionary\n",
+    "        try:\n",
+    "            if name not in [student for student in self.grades.keys()]:\n",
+    "                raise Exception(\"Student name not found\")\n",
+    "            print(f\"Grades for {name}\")\n",
+    "            print(\"------\")\n",
+    "            \n",
+    "            # Showing results\n",
+    "            for assignment, grade in self.grades[name].items():  \n",
+    "                print(f\"Component {assignment} : {grade}\")\n",
+    "            # Calculate Average\n",
+    "            grade_list = [float(grade) for grade in self.grades[name].values()] # Change to float type & list comprehension\n",
+    "            grade_average = sum(grade_list) / len(grade_list)\n",
+    "            print(f\"Final (weighted) grade is {grade_average}\")\n",
+    "            # Pass/fail decision\n",
+    "            if grade_average > 5:\n",
+    "                print(f\"{name} passed the course!\")\n",
+    "            else:\n",
+    "                print(f\"{name} failed the course!\")\n",
+    "        except Exception as e:\n",
+    "            print(\"Error - \", e)\n",
+    "            # name = input(\"Try with another student name\")\n",
+    "            # self.show_report(name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher1\n",
+      "Password: teacher123\n",
+      "Enter the List of Graded Assignments: Math, English, Economics\n",
+      "Error -  User ID must be a string and password must contains at leat 4 digits\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for invalid ID/PW Format\n",
+    "teacher = Grades_Manager()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher2\n",
+      "Password: teacher1234\n",
+      "Enter the List of Graded Assignments: Math, English, Economics\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for valid ID/PW\n",
+    "teacher2 = Grades_Manager()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher2\n",
+      "Password: teacher123\n",
+      "Error -  Wrong ID/PW\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for wrong ID/PW\n",
+    "teacher2.set_grades()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher2\n",
+      "Password: teacher1234\n",
+      "Authenticated\n",
+      "Student Name to Set Grades: Bill Gates\n",
+      "Bill Gates's Grade for Math: A+\n",
+      "Error -  Non-numerical grade\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for entering non-numerical grades\n",
+    "teacher2.set_grades()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher2\n",
+      "Password: teacher1234\n",
+      "Authenticated\n",
+      "Student Name to Set Grades: Bill Gates\n",
+      "Bill Gates's Grade for Math: 50.505050\n",
+      "Error -  The grades should be on a 0 to 10 scale\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for entering invalid grade scheme\n",
+    "teacher2.set_grades()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User ID: teacher2\n",
+      "Password: teacher1234\n",
+      "Authenticated\n",
+      "Student Name to Set Grades: Bill Gates\n",
+      "Bill Gates's Grade for Math: 8\n",
+      "Bill Gates's Grade for  English: 5\n",
+      "Bill Gates's Grade for  Economics: 6\n",
+      "{'Bill Gates': {'Math': '8', ' English': '5', ' Economics': '6'}}\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for setting grades properly\n",
+    "teacher2.set_grades()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Error -  Student name not found\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for invalid student name\n",
+    "teacher2.show_report('Steve Jobs')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Grades for Bill Gates\n",
+      "------\n",
+      "Component Math : 8\n",
+      "Component  English : 5\n",
+      "Component  Economics : 6\n",
+      "Final (weighted) grade is 6.333333333333333\n",
+      "Bill Gates passed the course!\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Testing for valid student name\n",
+    "teacher2.show_report('Bill Gates')"
+   ]
+  }
+ ],
+ "metadata": {
+  "colab": {
+   "name": "DSA Assignment III-b.ipynb",
+   "provenance": []
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

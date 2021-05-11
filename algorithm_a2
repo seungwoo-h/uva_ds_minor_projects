@@ -1,0 +1,210 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "assignment2_seungwoohong_thanos.ipynb",
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "V2t-ANpuPZSa",
+        "colab_type": "text"
+      },
+      "source": [
+        "## Data Structures and Algorithms in Python: Assignmnet 2\n",
+        "####AUTHOR: Seung Woo Hong (10879420)\n",
+        "####TA: Athanasios Efthymiou "
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "s-B2dXVon6hS",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# 1. Privacy Guard\n",
+        "\n",
+        "def find_email_addresses(s):\n",
+        "  list_of_addresses = []                    # define an empty list\n",
+        "                          \n",
+        "  for i in s.split():                       # split string by spaces \n",
+        "                                            # each loop checks whether its email or not                      \n",
+        "    if i.count(\"@\") == 1:                   # a valid email address has a single @ symbol\n",
+        "      if (i[0] != \"@\") and (i[-1] != \"@\"):  # @ must not be in the first or the last position\n",
+        "        if (i.split(\"@\")[1].count(\".\") >= 1) and (i.split(\"@\")[1][0] != \".\") and (i.split(\"@\")[1][-1] != \".\"):\n",
+        "          list_of_addresses.append(i)       # after @, \".\" must appear to match the form x@y.z\n",
+        "                                            # append to list\n",
+        "  return list_of_addresses"
+      ],
+      "execution_count": 5,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "iSqmjZ0nROBC",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 51
+        },
+        "outputId": "4e386d0c-b5ab-4fbe-989a-e9cbdadace40"
+      },
+      "source": [
+        "print(find_email_addresses(\"I'm new to Facebook and my email is testmail@yahoo.com\"))\n",
+        "print(find_email_addresses(\"Mail me at testmail@yahoo.com and newemail@gmail.com\"))"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "['testmail@yahoo.com']\n",
+            "['testmail@yahoo.com', 'newemail@gmail.com']\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "crkU7PDHWgXA",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# 2. Approximating Pi\n",
+        "\n",
+        "def approximate_pi(max_terms):\n",
+        "  pi_approximation = 1                      # define a variable to accumulate results\n",
+        "  for i in range(1, max_terms+1):           # loop for max_terms times\n",
+        "    pi_approximation = pi_approximation * ((2 * i * 2 * i) / ((2 * i - 1) * (2 * i + 1)))   # calculate and save it to the variable\n",
+        "  pi_approximation = pi_approximation * 2   # after loops are finished, multiply 2 to calculate pi\n",
+        "  return pi_approximation"
+      ],
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Pzyt0ycERbAx",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 51
+        },
+        "outputId": "4ff8771c-8705-47f3-8b32-05206fded209"
+      },
+      "source": [
+        "import math\n",
+        "\n",
+        "print(\"Real pi: \", math.pi)\n",
+        "print(\"Approximated pi: \", approximate_pi(99999))"
+      ],
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Real pi:  3.141592653589793\n",
+            "Approximated pi:  3.141584799578707\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "fctgfav1eSL6",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# 3. Smooth Strings \n",
+        "\n",
+        "  # 1) compute_substrings(s)\n",
+        "\n",
+        "def compute_substrings(s):\n",
+        "  substring_list = []                     # define an empty list\n",
+        "  for i in range(1, len(s)+1):            # size of the substring: 1 to length of the word\n",
+        "    for j in range(len(s)):               # starting point \n",
+        "      if s[j:j+i] not in substring_list:\n",
+        "        substring_list.append(s[j:j+i])   # append to the list if it doesn't exists already in the list\n",
+        "  return substring_list\n",
+        "\n",
+        "  # 2) extract_smooth_substrings(s)\n",
+        "  \n",
+        "def extract_smooth_substrings(s):\n",
+        "  # define empty lists\n",
+        "  substring_list = []                     \n",
+        "  list_of_smooth_strings = []\n",
+        "\n",
+        "  # get substrings first\n",
+        "  for i in range(1, len(s)+1):\n",
+        "    for j in range(len(s)):\n",
+        "      if s[j:j+i] not in substring_list:\n",
+        "        substring_list.append(s[j:j+i])\n",
+        "\n",
+        "  # get smooth substrings\n",
+        "  for k in substring_list:              # check each elements from the substring list\n",
+        "    # initialize list\n",
+        "    ord_k = []                            \n",
+        "    ord_lenk = []\n",
+        "    for x in k:                         # get real order and save it to a list\n",
+        "      ord_k.append(ord(x))\n",
+        "    for y in range(0, len(k)):          # get order assuming the substring is in smooth order\n",
+        "      ord_lenk.append(y)\n",
+        "      ord_k[y] += (-ord(k[0]))          # normalize\n",
+        "    if ord_k == ord_lenk:               # check if substring is in smooth order\n",
+        "      list_of_smooth_strings.append(k)\n",
+        "  return list_of_smooth_strings"
+      ],
+      "execution_count": 9,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "sCR7sIjYSH4Y",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 85
+        },
+        "outputId": "cabdbaa5-f411-4a99-a7e9-17c6e42b90d3"
+      },
+      "source": [
+        "print(compute_substrings('king'))\n",
+        "print(compute_substrings('racer'))\n",
+        "print(extract_smooth_substrings('abcf'))\n",
+        "print(extract_smooth_substrings('king'))"
+      ],
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "['k', 'i', 'n', 'g', 'ki', 'in', 'ng', 'kin', 'ing', 'king']\n",
+            "['r', 'a', 'c', 'e', 'ra', 'ac', 'ce', 'er', 'rac', 'ace', 'cer', 'race', 'acer', 'racer']\n",
+            "['a', 'b', 'c', 'f', 'ab', 'bc', 'abc']\n",
+            "['k', 'i', 'n', 'g']\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    }
+  ]
+}
