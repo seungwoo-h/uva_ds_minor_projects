@@ -6,6 +6,7 @@
 - Databases and Data Visualization (8.5 / 10)
 - Machine Learning (8.5 / 10)
 - Text Retrieval and Mining (9.0 / 10)
+- Privacy Law and Ethics
 
 ### Projects
 - Python app programming
