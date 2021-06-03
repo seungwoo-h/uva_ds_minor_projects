@@ -8,8 +8,9 @@
 - Text Retrieval and Mining (9.0 / 10)
 - Privacy Law and Ethics
 
-### Projects
+### Projects and Achievements
 - Python app programming
-- Data analysis using R
+- Statistical data analysis using R
 - Machine learning - Dutch CBS data regression on depression
 - NLP - News publishers classification
+- Study on GDPR
