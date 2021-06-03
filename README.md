@@ -11,4 +11,4 @@
 - Python app programming
 - Data analysis using R
 - Machine learning - Dutch CBS data regression on depression
-- NLP - News headline classification
+- NLP - News publishers classification
