@@ -1,4 +1,4 @@
-# UvA 2020-2021 Data Science and AI Minor Projects
+# UvA 2020-2021 Data Science and AI Minor
 
 ### Courses (Grade)
 - Algorithms and Data Structures in Python (9.5 / 10) (A+)
